@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { PeriodForm, PeriodCalendar, PeriodStats } from "./components";
+import type { PeriodData, PeriodCalculations } from "./utils/calculations";
+import { calculatePeriodData } from "./utils/calculations";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [calculations, setCalculations] = useState<PeriodCalculations | null>(
+    null,
+  );
+
+  const handleFormSubmit = (data: PeriodData) => {
+    const result = calculatePeriodData(data);
+    setCalculations(result);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <header className="app-header">
+        <div className="header-content">
+          <h1>🌸 Period Tracker</h1>
+          <p>Track your cycle and predict your fertility window</p>
+        </div>
+      </header>
+
+      <main className="app-main">
+        <PeriodForm onSubmit={handleFormSubmit} />
+
+        {calculations && (
+          <>
+            <PeriodStats calculations={calculations} />
+            <PeriodCalendar calculations={calculations} />
+          </>
+        )}
+      </main>
+
+      <footer className="app-footer">
+        <p>💚 Created with love for your health awareness</p>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;

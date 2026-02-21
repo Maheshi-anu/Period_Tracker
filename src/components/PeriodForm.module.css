@@ -1,0 +1,135 @@
+.formContainer {
+    background: linear-gradient(135deg, #ffe6f0 0%, #f0e6ff 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    box-shadow: 0 10px 40px rgba(255, 105, 180, 0.15);
+    border: 2px solid rgba(255, 182, 217, 0.5);
+}
+
+.formHeader {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.formHeader h2 {
+    color: #d946a6;
+    font-size: 2rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.formHeader p {
+    color: #c084fc;
+    font-size: 0.95rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.formGroup label {
+    color: #7c3aed;
+    font-weight: 600;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.icon {
+    font-size: 1.2rem;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.input {
+    padding: 0.9rem 1rem;
+    border: 2px solid #ffb3d9;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #7c3aed;
+    transition: all 0.3s ease;
+}
+
+.input:focus {
+    outline: none;
+    border-color: #d946a6;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(217, 70, 166, 0.1);
+}
+
+.input::placeholder {
+    color: #d8b4fe;
+}
+
+.hint {
+    font-size: 0.8rem;
+    color: #d8b4fe;
+    font-weight: 500;
+}
+
+.submitButton {
+    padding: 1rem;
+    background: linear-gradient(135deg, #ff69b4 0%, #d946a6 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+}
+
+.submitButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 105, 180, 0.4);
+    background: linear-gradient(135deg, #ff5fa6 0%, #d9299a 100%);
+}
+
+.submitButton:active {
+    transform: translateY(0);
+}
+
+.info {
+    margin-top: 2rem;
+    padding: 1.2rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 12px;
+    border-left: 4px solid #ff69b4;
+}
+
+.infoTitle {
+    color: #d946a6;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+}
+
+.infoText {
+    color: #a855f7;
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.5;
+}
