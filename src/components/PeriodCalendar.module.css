@@ -1,0 +1,177 @@
+.calendarContainer {
+    background: linear-gradient(135deg, #ffe6f0 0%, #f0e6ff 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 600px;
+    margin: 2rem auto;
+    box-shadow: 0 10px 40px rgba(255, 105, 180, 0.15);
+    border: 2px solid rgba(255, 182, 217, 0.5);
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.calendarHeader h3 {
+    color: #d946a6;
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 700;
+    min-width: 180px;
+    text-align: center;
+}
+
+.navButton {
+    background: linear-gradient(135deg, #ff69b4 0%, #d946a6 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.navButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+}
+
+.navButton:active {
+    transform: scale(0.95);
+}
+
+.weekDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.weekDay {
+    text-align: center;
+    color: #d946a6;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    padding: 0.5rem;
+}
+
+.daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba(255, 182, 217, 0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    font-weight: 600;
+}
+
+.day:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.otherMonth {
+    opacity: 0.3;
+    background-color: rgba(200, 200, 200, 0.2);
+}
+
+.dayNumber {
+    color: #7c3aed;
+    font-size: 1rem;
+    font-weight: 700;
+    z-index: 2;
+}
+
+.badge {
+    position: absolute;
+    font-size: 0.8rem;
+    bottom: 2px;
+    right: 2px;
+}
+
+.periodDay {
+    background: linear-gradient(135deg, #ffb3d9 0%, #ff99cc 100%);
+    border-color: #ff69b4;
+}
+
+.periodDay .dayNumber {
+    color: #d946a6;
+}
+
+.ovulationDay {
+    background: linear-gradient(135deg, #ffd9b3 0%, #ffcc99 100%);
+    border-color: #ff9a33;
+    box-shadow: 0 0 0 2px rgba(255, 154, 51, 0.3);
+}
+
+.ovulationDay .dayNumber {
+    color: #d97706;
+    font-weight: 800;
+}
+
+.fertileWindow {
+    background: linear-gradient(135deg, #b3f5e6 0%, #99ffe6 100%);
+    border-color: #14b8a6;
+}
+
+.fertileWindow .dayNumber {
+    color: #0d9488;
+}
+
+.pregnancyChance {
+    background: linear-gradient(135deg, #e6d5f5 0%, #d9ccf0 100%);
+    border-color: #c084fc;
+}
+
+.pregnancyChance .dayNumber {
+    color: #a855f7;
+}
+
+.legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid rgba(255, 182, 217, 0.3);
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.legendBox {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 2px solid rgba(255, 182, 217, 0.5);
+}
+
+.legendItem span {
+    color: #7c3aed;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
