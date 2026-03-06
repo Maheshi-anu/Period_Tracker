@@ -171,3 +171,75 @@ export function formatDateShort(date: Date): string {
   const year = date.getFullYear();
   return `${month}/${day}/${year}`;
 }
+
+/**
+ * Check if today is a period day
+ */
+export function isCurrentlyOnPeriod(calculations: PeriodCalculations): boolean {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const periodStart = new Date(calculations.nextPeriodStart);
+  periodStart.setHours(0, 0, 0, 0);
+  const periodEnd = new Date(calculations.nextPeriodEnd);
+  periodEnd.setHours(0, 0, 0, 0);
+  return today >= periodStart && today <= periodEnd;
+}
+
+/**
+ * Get which day of period (1st, 2nd, etc.)
+ */
+export function getPeriodDayNumber(calculations: PeriodCalculations): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const periodStart = new Date(calculations.nextPeriodStart);
+  periodStart.setHours(0, 0, 0, 0);
+  const dayNumber = Math.floor((today.getTime() - periodStart.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+  return Math.max(1, dayNumber);
+}
+
+/**
+ * Get days until next period
+ */
+export function getDaysUntilNextPeriod(calculations: PeriodCalculations): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const nextPeriod = new Date(calculations.nextPeriodStart);
+  nextPeriod.setHours(0, 0, 0, 0);
+  const daysUntil = Math.ceil((nextPeriod.getTime() - today.getTime()) / (24 * 60 * 60 * 1000));
+  return Math.max(0, daysUntil);
+}
+
+/**
+ * Get all previous period dates for months before the given date
+ */
+export function getPreviousMonthsPeriodDates(
+  calculations: PeriodCalculations,
+  months: number = 6
+): Date[] {
+  const periodDates: Date[] = [];
+  const today = new Date();
+  const periodLength = Math.floor((calculations.nextPeriodEnd.getTime() - calculations.nextPeriodStart.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+  
+  // Work backwards from nextPeriodStart
+  let currentPeriodStart = new Date(calculations.nextPeriodStart);
+  
+  for (let i = 0; i < months; i++) {
+    // Go back one cycle
+    currentPeriodStart = new Date(currentPeriodStart);
+    const cycleLength = Math.floor((calculations.nextPeriodStart.getTime() - currentPeriodStart.getTime()) / (24 * 60 * 60 * 1000));
+    
+    if (cycleLength > 0) {
+      currentPeriodStart.setDate(currentPeriodStart.getDate() - cycleLength);
+    } else {
+      // Estimate based on typical 28-day cycle
+      currentPeriodStart.setDate(currentPeriodStart.getDate() - 28);
+    }
+    
+    // Only include if it's in the past
+    if (currentPeriodStart < today) {
+      periodDates.push(new Date(currentPeriodStart));
+    }
+  }
+  
+  return periodDates;
+}
