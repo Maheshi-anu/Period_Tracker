@@ -1,7 +1,17 @@
 import { useState } from "react";
-import { MdFavorite, MdWaterDrop } from "react-icons/md";
+import {
+  MdFavorite,
+  MdWaterDrop,
+  MdLocalFlorist,
+  MdAutoAwesome,
+  MdSpa,
+} from "react-icons/md";
 import type { PeriodCalculations } from "../utils/calculations";
-import { getCalendarDays, formatDate } from "../utils/calculations";
+import {
+  getCalendarDays,
+  formatDate,
+  getPreviousMonthsPeriodDates,
+} from "../utils/calculations";
 import styles from "./PeriodCalendar.module.css";
 
 interface PeriodCalendarProps {
@@ -10,12 +20,23 @@ interface PeriodCalendarProps {
 
 export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<DayStatus | null>(null);
+  const previousPeriodDates = getPreviousMonthsPeriodDates(calculations, 6);
 
   const daysInCalendar = getCalendarDays(
     currentDate.getFullYear(),
     currentDate.getMonth(),
     calculations,
   );
+
+  const isPreviousPeriodDate = (date: Date): boolean => {
+    return previousPeriodDates.some(
+      (prevDate) =>
+        prevDate.getFullYear() === date.getFullYear() &&
+        prevDate.getMonth() === date.getMonth() &&
+        prevDate.getDate() === date.getDate(),
+    );
+  };
 
   const handlePrevMonth = () => {
     setCurrentDate(
@@ -56,31 +77,44 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
       </div>
 
       <div className={styles.daysGrid}>
-        {daysInCalendar.map((dayStatus, index) => (
-          <div
-            key={index}
-            className={`${styles.day} ${!dayStatus.isCurrentMonth ? styles.otherMonth : ""} ${
-              dayStatus.isPeriodDay ? styles.periodDay : ""
-            } ${dayStatus.isOvulationDay ? styles.ovulationDay : ""} ${
-              dayStatus.isFertileWindow ? styles.fertileWindow : ""
-            } ${dayStatus.isPregnancyChanceWindow ? styles.pregnancyChance : ""}`}
-            title={getDayTooltip(dayStatus)}
-          >
-            <span className={styles.dayNumber}>{dayStatus.day}</span>
-            {dayStatus.isOvulationDay && (
-              <MdFavorite
-                style={{ color: "#ff9a33", fontSize: "0.8rem" }}
-                className={styles.badge}
-              />
-            )}
-            {dayStatus.isPeriodDay && (
-              <MdWaterDrop
-                style={{ color: "#e63946", fontSize: "0.8rem" }}
-                className={styles.badge}
-              />
-            )}
-          </div>
-        ))}
+        {daysInCalendar.map((dayStatus, index) => {
+          const isPrevPeriod = isPreviousPeriodDate(dayStatus.date);
+          return (
+            <div
+              key={index}
+              className={`${styles.day} ${!dayStatus.isCurrentMonth ? styles.otherMonth : ""} ${
+                isPrevPeriod ? styles.previousPeriodDay : ""
+              } ${dayStatus.isPeriodDay && !isPrevPeriod ? styles.periodDay : ""} ${
+                dayStatus.isOvulationDay ? styles.ovulationDay : ""
+              } ${dayStatus.isFertileWindow && !isPrevPeriod ? styles.fertileWindow : ""} ${
+                dayStatus.isPregnancyChanceWindow && !isPrevPeriod
+                  ? styles.pregnancyChance
+                  : ""
+              }`}
+              title={getDayTooltip(dayStatus)}
+              onClick={() =>
+                dayStatus.isCurrentMonth && setSelectedDay(dayStatus)
+              }
+            >
+              <span className={styles.dayNumber}>{dayStatus.day}</span>
+              {dayStatus.isOvulationDay && !isPrevPeriod && (
+                <MdFavorite
+                  style={{ color: "#ff9a33", fontSize: "0.8rem" }}
+                  className={styles.badge}
+                />
+              )}
+              {(dayStatus.isPeriodDay || isPrevPeriod) && (
+                <MdWaterDrop
+                  style={{
+                    color: isPrevPeriod ? "#dc2626" : "#e63946",
+                    fontSize: "0.8rem",
+                  }}
+                  className={styles.badge}
+                />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <div className={styles.legend}>
@@ -103,6 +137,42 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
           <span>Pregnancy Chance</span>
         </div>
       </div>
+
+      {selectedDay && (
+        <div
+          className={styles.popupOverlay}
+          onClick={() => setSelectedDay(null)}
+        >
+          <div
+            className={`${styles.popup} ${
+              selectedDay.isPeriodDay
+                ? styles.popupPeriod
+                : selectedDay.isOvulationDay
+                  ? styles.popupOvulation
+                  : selectedDay.isFertileWindow
+                    ? styles.popupFertile
+                    : selectedDay.isPregnancyChanceWindow
+                      ? styles.popupPregnancy
+                      : styles.popupNormal
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.closeButton}
+              onClick={() => setSelectedDay(null)}
+            >
+              ✕
+            </button>
+            <div className={styles.popupIcon}>{getPopupIcon(selectedDay)}</div>
+            <div className={styles.popupDate}>
+              {formatDate(selectedDay.date)}
+            </div>
+            <div className={styles.popupMessage}>
+              {getPopupMessage(selectedDay)}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -134,4 +204,53 @@ function getDayTooltip(dayStatus: DayStatus): string {
   }
 
   return parts.length > 0 ? parts.join(" • ") : formatDate(dayStatus.date);
+}
+
+function getPopupMessage(dayStatus: DayStatus): string {
+  if (dayStatus.isPeriodDay && dayStatus.isOvulationDay) {
+    return "This day overlaps with your ovulation period. Monitor for any changes in your cycle.";
+  }
+
+  if (dayStatus.isPeriodDay) {
+    return "Your menstrual period. Remember to take care of yourself and stay hydrated.";
+  }
+
+  if (dayStatus.isOvulationDay) {
+    return "Ovulation Day - Your most fertile day! An egg has been released from your ovary.";
+  }
+
+  if (dayStatus.isFertileWindow && dayStatus.isPregnancyChanceWindow) {
+    return "Peak Fertility Window - Highest chance of conception. Plan accordingly!";
+  }
+
+  if (dayStatus.isFertileWindow) {
+    return "Fertile Window - You have a moderate chance of conception during this period.";
+  }
+
+  if (dayStatus.isPregnancyChanceWindow) {
+    return "Pregnancy Chance Window - Increased likelihood of conception.";
+  }
+
+  return "Regular day - No significant cycle events on this date.";
+}
+
+function getPopupIcon(dayStatus: DayStatus) {
+  const iconProps = {
+    size: 48,
+    style: { marginBottom: "0.5rem" },
+  };
+
+  if (dayStatus.isPeriodDay) {
+    return <MdWaterDrop {...iconProps} color="#d946a6" />;
+  }
+  if (dayStatus.isOvulationDay) {
+    return <MdFavorite {...iconProps} color="#ff9a33" />;
+  }
+  if (dayStatus.isFertileWindow) {
+    return <MdLocalFlorist {...iconProps} color="#14b8a6" />;
+  }
+  if (dayStatus.isPregnancyChanceWindow) {
+    return <MdAutoAwesome {...iconProps} color="#a855f7" />;
+  }
+  return <MdSpa {...iconProps} color="#7c3aed" />;
 }

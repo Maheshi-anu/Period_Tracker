@@ -13,9 +13,75 @@
 
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-bottom: 2rem;
+}
+
+.currentPeriodCard {
+    margin-bottom: 2rem;
+}
+
+.periodStatusCard {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 24px rgba(255, 105, 180, 0.12);
+    border-top: 6px solid #d946a6;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.3s ease;
+}
+
+.periodStatusCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(255, 105, 180, 0.18);
+}
+
+.nextPeriodCard {
+    border-top-color: #7c3aed;
+}
+
+.periodIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(217, 70, 166, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+    border-radius: 12px;
+}
+
+.periodContent {
+    flex: 1;
+    text-align: center;
+}
+
+.periodContent h3 {
+    margin: 0 0 1rem 0;
+    color: #d946a6;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.instructions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.instructions p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.nextPeriodDate {
+    margin: 0;
+    color: #9ca3af;
+    font-size: 0.9rem;
 }
 
 .statCard {

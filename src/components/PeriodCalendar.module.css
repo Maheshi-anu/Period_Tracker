@@ -125,6 +125,15 @@
     color: #d946a6;
 }
 
+.previousPeriodDay {
+    background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+    border-color: #dc2626;
+}
+
+.previousPeriodDay .dayNumber {
+    color: #991b1b;
+}
+
 .ovulationDay {
     background: linear-gradient(135deg, #ffd9b3 0%, #ffcc99 100%);
     border-color: #ff9a33;
@@ -179,4 +188,136 @@
     color: #7c3aed;
     font-size: 0.9rem;
     font-weight: 600;
+}
+
+/* Popup Styles */
+.popupOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.popup {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border-top: 6px solid;
+    position: relative;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.closeButton {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s ease;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.closeButton:hover {
+    color: #ef4444;
+}
+
+.popupIcon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.popupDate {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.popupMessage {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+}
+
+/* Popup Variant Colors */
+.popupPeriod {
+    border-top-color: #ff69b4;
+}
+
+.popupPeriod .popupDate {
+    color: #d946a6;
+}
+
+.popupOvulation {
+    border-top-color: #ff9a33;
+}
+
+.popupOvulation .popupDate {
+    color: #d97706;
+}
+
+.popupFertile {
+    border-top-color: #14b8a6;
+}
+
+.popupFertile .popupDate {
+    color: #0d9488;
+}
+
+.popupPregnancy {
+    border-top-color: #a855f7;
+}
+
+.popupPregnancy .popupDate {
+    color: #a855f7;
+}
+
+.popupNormal {
+    border-top-color: #7c3aed;
+}
+
+.popupNormal .popupDate {
+    color: #7c3aed;
 }
