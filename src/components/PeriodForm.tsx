@@ -1,4 +1,12 @@
 import { useState } from "react";
+import {
+  MdFavorite,
+  MdCalendarMonth,
+  MdWaterDrop,
+  MdCalendarToday,
+  MdCheckCircle,
+  MdMenuBook,
+} from "react-icons/md";
 import type { PeriodData } from "../utils/calculations";
 import styles from "./PeriodForm.module.css";
 
@@ -39,14 +47,17 @@ export function PeriodForm({ onSubmit }: PeriodFormProps) {
   return (
     <div className={styles.formContainer}>
       <div className={styles.formHeader}>
-        <h2>💕 Period Tracker</h2>
+        <h2>
+          <MdFavorite style={{ marginRight: "8px", color: "#ff69b4" }} /> Period
+          Tracker
+        </h2>
         <p>Enter your cycle information to get predictions</p>
       </div>
 
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
           <label htmlFor="cycleLength">
-            <span className={styles.icon}>📅</span>
+            <MdCalendarMonth style={{ color: "#d946a6", marginRight: "6px" }} />
             Average Cycle Length (days)
           </label>
           <div className={styles.inputWrapper}>
@@ -65,7 +76,7 @@ export function PeriodForm({ onSubmit }: PeriodFormProps) {
 
         <div className={styles.formGroup}>
           <label htmlFor="periodLength">
-            <span className={styles.icon}>🩸</span>
+            <MdWaterDrop style={{ color: "#e63946", marginRight: "6px" }} />
             Average Period Length (days)
           </label>
           <div className={styles.inputWrapper}>
@@ -84,7 +95,7 @@ export function PeriodForm({ onSubmit }: PeriodFormProps) {
 
         <div className={styles.formGroup}>
           <label htmlFor="lastPeriodStart">
-            <span className={styles.icon}>📍</span>
+            <MdCalendarToday style={{ color: "#a855f7", marginRight: "6px" }} />
             Last Period Start Date
           </label>
           <div className={styles.inputWrapper}>
@@ -102,12 +113,15 @@ export function PeriodForm({ onSubmit }: PeriodFormProps) {
         </div>
 
         <button type="submit" className={styles.submitButton}>
-          ✨ Calculate & Track
+          <MdCheckCircle style={{ marginRight: "8px" }} /> Calculate & Track
         </button>
       </form>
 
       <div className={styles.info}>
-        <p className={styles.infoTitle}>📚 Did you know?</p>
+        <p className={styles.infoTitle}>
+          <MdMenuBook style={{ marginRight: "8px", color: "#d946a6" }} /> Did
+          you know?
+        </p>
         <p className={styles.infoText}>
           A typical menstrual cycle is 28 days, but it can range from 21 to 35
           days. Every person is different!

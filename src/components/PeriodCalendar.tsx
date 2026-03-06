@@ -1,9 +1,7 @@
 import { useState } from "react";
+import { MdFavorite, MdWaterDrop } from "react-icons/md";
 import type { PeriodCalculations } from "../utils/calculations";
-import {
-  getCalendarDays,
-  formatDate,
-} from "../utils/calculations";
+import { getCalendarDays, formatDate } from "../utils/calculations";
 import styles from "./PeriodCalendar.module.css";
 
 interface PeriodCalendarProps {
@@ -70,9 +68,17 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
           >
             <span className={styles.dayNumber}>{dayStatus.day}</span>
             {dayStatus.isOvulationDay && (
-              <span className={styles.badge}>🥚</span>
+              <MdFavorite
+                style={{ color: "#ff9a33", fontSize: "0.8rem" }}
+                className={styles.badge}
+              />
             )}
-            {dayStatus.isPeriodDay && <span className={styles.badge}>🩸</span>}
+            {dayStatus.isPeriodDay && (
+              <MdWaterDrop
+                style={{ color: "#e63946", fontSize: "0.8rem" }}
+                className={styles.badge}
+              />
+            )}
           </div>
         ))}
       </div>

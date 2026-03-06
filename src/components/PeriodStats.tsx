@@ -1,19 +1,36 @@
+import {
+  MdBarChart,
+  MdEgg,
+  MdFavorite,
+  MdStar,
+  MdLightbulb,
+  MdMenuBook,
+} from "react-icons/md";
 import type { PeriodCalculations } from "../utils/calculations";
 import { formatDate, formatDateShort } from "../utils/calculations";
 import styles from "./PeriodStats.module.css";
 
 interface PeriodStatsProps {
   calculations: PeriodCalculations;
+  onShowMedicalDetails?: () => void;
 }
 
-export function PeriodStats({ calculations }: PeriodStatsProps) {
+export function PeriodStats({
+  calculations,
+  onShowMedicalDetails,
+}: PeriodStatsProps) {
   return (
     <div className={styles.statsContainer}>
-      <h2>📊 Your Cycle Information</h2>
+      <h2>
+        <MdBarChart style={{ marginRight: "8px", color: "#d946a6" }} /> Your
+        Cycle Information
+      </h2>
 
       <div className={styles.statsGrid}>
         <div className={styles.statCard + " " + styles.periodCard}>
-          <div className={styles.statIcon}>🩸</div>
+          <div className={styles.statIcon} style={{ color: "#ff69b4" }}>
+            <MdFavorite size={48} />
+          </div>
           <div className={styles.statContent}>
             <h3>Next Period</h3>
             <p className={styles.date}>
@@ -27,7 +44,9 @@ export function PeriodStats({ calculations }: PeriodStatsProps) {
         </div>
 
         <div className={styles.statCard + " " + styles.ovulationCard}>
-          <div className={styles.statIcon}>🥚</div>
+          <div className={styles.statIcon} style={{ color: "#ff9a33" }}>
+            <MdEgg size={48} />
+          </div>
           <div className={styles.statContent}>
             <h3>Ovulation Day</h3>
             <p className={styles.date}>
@@ -40,7 +59,9 @@ export function PeriodStats({ calculations }: PeriodStatsProps) {
         </div>
 
         <div className={styles.statCard + " " + styles.fertileCard}>
-          <div className={styles.statIcon}>💚</div>
+          <div className={styles.statIcon} style={{ color: "#14b8a6" }}>
+            <MdFavorite size={48} />
+          </div>
           <div className={styles.statContent}>
             <h3>Fertile Window</h3>
             <p className={styles.date}>
@@ -59,7 +80,9 @@ export function PeriodStats({ calculations }: PeriodStatsProps) {
         </div>
 
         <div className={styles.statCard + " " + styles.pregnancyCard}>
-          <div className={styles.statIcon}>✨</div>
+          <div className={styles.statIcon} style={{ color: "#a855f7" }}>
+            <MdStar size={48} />
+          </div>
           <div className={styles.statContent}>
             <h3>Pregnancy Chance Window</h3>
             <p className={styles.date}>
@@ -85,7 +108,10 @@ export function PeriodStats({ calculations }: PeriodStatsProps) {
       </div>
 
       <div className={styles.disclaimer}>
-        <p className={styles.disclaimerTitle}>💡 Important Note</p>
+        <p className={styles.disclaimerTitle}>
+          <MdLightbulb style={{ marginRight: "8px", color: "#a855f7" }} />{" "}
+          Important Note
+        </p>
         <p className={styles.disclaimerText}>
           These predictions are estimates based on typical cycle patterns. Every
           person is unique, and cycle lengths can vary. This app is for tracking
@@ -93,6 +119,15 @@ export function PeriodStats({ calculations }: PeriodStatsProps) {
           advice. For more accurate predictions, consider consulting with a
           healthcare provider.
         </p>
+        {onShowMedicalDetails && (
+          <button
+            className={styles.moreDetailsButton}
+            onClick={onShowMedicalDetails}
+          >
+            <MdMenuBook style={{ marginRight: "8px" }} /> Learn More About
+            Medical Accuracy
+          </button>
+        )}
       </div>
     </div>
   );
