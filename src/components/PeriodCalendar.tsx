@@ -10,7 +10,8 @@ import type { PeriodCalculations } from "../utils/calculations";
 import {
   getCalendarDays,
   formatDate,
-  getPreviousMonthsPeriodDates,
+  getPreviousPeriodRanges,
+  isPreviousPeriodDate,
 } from "../utils/calculations";
 import styles from "./PeriodCalendar.module.css";
 
@@ -21,7 +22,7 @@ interface PeriodCalendarProps {
 export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<DayStatus | null>(null);
-  const previousPeriodDates = getPreviousMonthsPeriodDates(calculations, 6);
+  const previousPeriodRanges = getPreviousPeriodRanges(calculations, 6);
 
   const daysInCalendar = getCalendarDays(
     currentDate.getFullYear(),
@@ -29,13 +30,8 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
     calculations,
   );
 
-  const isPreviousPeriodDate = (date: Date): boolean => {
-    return previousPeriodDates.some(
-      (prevDate) =>
-        prevDate.getFullYear() === date.getFullYear() &&
-        prevDate.getMonth() === date.getMonth() &&
-        prevDate.getDate() === date.getDate(),
-    );
+  const isPrevPeriodDate = (date: Date): boolean => {
+    return isPreviousPeriodDate(date, previousPeriodRanges);
   };
 
   const handlePrevMonth = () => {
@@ -78,7 +74,7 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
 
       <div className={styles.daysGrid}>
         {daysInCalendar.map((dayStatus, index) => {
-          const isPrevPeriod = isPreviousPeriodDate(dayStatus.date);
+          const isPrevPeriod = isPrevPeriodDate(dayStatus.date);
           return (
             <div
               key={index}
@@ -92,9 +88,14 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
                   : ""
               }`}
               title={getDayTooltip(dayStatus)}
-              onClick={() =>
-                dayStatus.isCurrentMonth && setSelectedDay(dayStatus)
-              }
+              onClick={() => {
+                if (dayStatus.isCurrentMonth) {
+                  setSelectedDay({
+                    ...dayStatus,
+                    isPreviousPeriod: isPrevPeriod,
+                  });
+                }
+              }}
             >
               <span className={styles.dayNumber}>{dayStatus.day}</span>
               {dayStatus.isOvulationDay && !isPrevPeriod && (
@@ -145,15 +146,17 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
         >
           <div
             className={`${styles.popup} ${
-              selectedDay.isPeriodDay
-                ? styles.popupPeriod
-                : selectedDay.isOvulationDay
-                  ? styles.popupOvulation
-                  : selectedDay.isFertileWindow
-                    ? styles.popupFertile
-                    : selectedDay.isPregnancyChanceWindow
-                      ? styles.popupPregnancy
-                      : styles.popupNormal
+              selectedDay.isPreviousPeriod
+                ? styles.popupPreviousPeriod
+                : selectedDay.isPeriodDay
+                  ? styles.popupPeriod
+                  : selectedDay.isOvulationDay
+                    ? styles.popupOvulation
+                    : selectedDay.isFertileWindow
+                      ? styles.popupFertile
+                      : selectedDay.isPregnancyChanceWindow
+                        ? styles.popupPregnancy
+                        : styles.popupNormal
             }`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -168,7 +171,7 @@ export function PeriodCalendar({ calculations }: PeriodCalendarProps) {
               {formatDate(selectedDay.date)}
             </div>
             <div className={styles.popupMessage}>
-              {getPopupMessage(selectedDay)}
+              {getPopupMessage(selectedDay, previousPeriodRanges)}
             </div>
           </div>
         </div>
@@ -185,11 +188,15 @@ interface DayStatus {
   isOvulationDay: boolean;
   isFertileWindow: boolean;
   isPregnancyChanceWindow: boolean;
+  isPreviousPeriod?: boolean;
 }
 
 function getDayTooltip(dayStatus: DayStatus): string {
   const parts: string[] = [];
 
+  if (dayStatus.isPreviousPeriod) {
+    parts.push("Previous Period");
+  }
   if (dayStatus.isPeriodDay) {
     parts.push("Period Day");
   }
@@ -206,7 +213,18 @@ function getDayTooltip(dayStatus: DayStatus): string {
   return parts.length > 0 ? parts.join(" • ") : formatDate(dayStatus.date);
 }
 
-function getPopupMessage(dayStatus: DayStatus): string {
+function getPopupMessage(
+  dayStatus: DayStatus,
+  previousPeriodRanges?: Array<{ start: Date; end: Date }>,
+): string {
+  const isPrevPeriod =
+    previousPeriodRanges &&
+    isPreviousPeriodDate(dayStatus.date, previousPeriodRanges);
+
+  if (isPrevPeriod) {
+    return `Passed period - ${formatDate(dayStatus.date)}`;
+  }
+
   if (dayStatus.isPeriodDay && dayStatus.isOvulationDay) {
     return "This day overlaps with your ovulation period. Monitor for any changes in your cycle.";
   }
@@ -240,6 +258,9 @@ function getPopupIcon(dayStatus: DayStatus) {
     style: { marginBottom: "0.5rem" },
   };
 
+  if (dayStatus.isPreviousPeriod) {
+    return <MdWaterDrop {...iconProps} color="#991b1b" />;
+  }
   if (dayStatus.isPeriodDay) {
     return <MdWaterDrop {...iconProps} color="#d946a6" />;
   }

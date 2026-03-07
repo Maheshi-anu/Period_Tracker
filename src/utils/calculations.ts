@@ -243,3 +243,58 @@ export function getPreviousMonthsPeriodDates(
   
   return periodDates;
 }
+
+/**
+ * Get all previous period ranges (start and end dates) for months before today
+ */
+export function getPreviousPeriodRanges(
+  calculations: PeriodCalculations,
+  months: number = 6
+): Array<{ start: Date; end: Date }> {
+  const periodRanges: Array<{ start: Date; end: Date }> = [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const periodLength = Math.floor((calculations.nextPeriodEnd.getTime() - calculations.nextPeriodStart.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+  
+  // Work backwards from nextPeriodStart
+  let currentPeriodStart = new Date(calculations.nextPeriodStart);
+  currentPeriodStart.setHours(0, 0, 0, 0);
+  
+  for (let i = 0; i < months; i++) {
+    const cycleLength = Math.floor((calculations.nextPeriodStart.getTime() - currentPeriodStart.getTime()) / (24 * 60 * 60 * 1000));
+    
+    if (cycleLength > 0) {
+      currentPeriodStart.setDate(currentPeriodStart.getDate() - cycleLength);
+    } else {
+      // Estimate based on typical 28-day cycle
+      currentPeriodStart.setDate(currentPeriodStart.getDate() - 28);
+    }
+    
+    // Only include if it's in the past
+    if (currentPeriodStart < today) {
+      const periodEnd = new Date(currentPeriodStart);
+      periodEnd.setDate(periodEnd.getDate() + periodLength - 1);
+      periodRanges.push({ start: new Date(currentPeriodStart), end: periodEnd });
+    }
+  }
+  
+  return periodRanges;
+}
+
+/**
+ * Check if a date is in a previous period range
+ */
+export function isPreviousPeriodDate(
+  date: Date,
+  periodRanges: Array<{ start: Date; end: Date }>
+): boolean {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  return periodRanges.some((range) => {
+    const start = new Date(range.start);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(range.end);
+    end.setHours(0, 0, 0, 0);
+    return d >= start && d <= end;
+  });
+}
