@@ -74,22 +74,6 @@ export function PeriodStats({
       )}
 
       <div className={styles.statsGrid}>
-        <div className={styles.statCard + " " + styles.periodCard}>
-          <div className={styles.statIcon} style={{ color: "#ff69b4" }}>
-            <MdFavorite size={48} />
-          </div>
-          <div className={styles.statContent}>
-            <h3>Next Period</h3>
-            <p className={styles.date}>
-              {formatDate(calculations.nextPeriodStart)}
-            </p>
-            <p className={styles.details}>
-              {formatDateShort(calculations.nextPeriodStart)} -{" "}
-              {formatDateShort(calculations.nextPeriodEnd)}
-            </p>
-          </div>
-        </div>
-
         <div className={styles.statCard + " " + styles.ovulationCard}>
           <div className={styles.statIcon} style={{ color: "#ff9a33" }}>
             <MdEgg size={48} />
@@ -131,7 +115,7 @@ export function PeriodStats({
             <MdStar size={48} />
           </div>
           <div className={styles.statContent}>
-            <h3>Pregnancy Chance Window</h3>
+            <h3>Pregnancy Chance</h3>
             <p className={styles.date}>
               {calculations.pregnancyChanceWindow.start.toLocaleDateString(
                 "en-US",

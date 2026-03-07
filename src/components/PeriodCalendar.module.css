@@ -290,6 +290,14 @@
     color: #d946a6;
 }
 
+.popupPreviousPeriod {
+    border-top-color: #dc2626;
+}
+
+.popupPreviousPeriod .popupDate {
+    color: #991b1b;
+}
+
 .popupOvulation {
     border-top-color: #ff9a33;
 }
